@@ -14,17 +14,25 @@ class App extends Component {
       cds
     });
   };
-  updateCD = () => {};
-  removeCD = () => {};
+  updateCD = (cd, updatedCd) => {
+    const cds = { ...this.state.cds };
+    cds[cd] = updatedCd;
+    this.setState({
+      cds
+    });
+  };
+  removeCD = cd => {
+    const cds = { ...this.state.cds };
+    delete cds[cd];
+    this.setState({
+      cds
+    });
+  };
   render() {
     return (
       <React.Fragment>
-        <AddCDForm
-          addCD={this.addCD}
-          updateCD={this.updateCD}
-          removeCD={this.removeCD}
-        />
-        <CDCollection />
+        <AddCDForm addCD={this.addCD} updateCD={this.updateCD} />
+        <CDCollection cds={this.state.cds} removeCD={this.removeCD} />
       </React.Fragment>
     );
   }
