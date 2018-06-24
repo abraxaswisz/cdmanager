@@ -1,21 +1,6 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment, Component } from "react";
 
-class AddCDForm extends Component {
-  artistRef = React.createRef();
-  albumRef = React.createRef();
-  yearRef = React.createRef();
-
-  createCD = e => {
-    e.preventDefault();
-    console.log(this.artistRef.current.value);
-    const cd = {
-      artist: this.artistRef.current.value,
-      album: this.artistRef.current.value,
-      year: this.yearRef.current.value
-    };
-    this.props.addCD(cd);
-    e.currentTarget.reset();
-  };
+class EditCDForm extends Component {
   render() {
     return (
       <Fragment>
@@ -36,4 +21,4 @@ class AddCDForm extends Component {
   }
 }
 
-export default AddCDForm;
+export default EditCDForm;
