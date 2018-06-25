@@ -22,7 +22,6 @@ class CD extends Component {
     });
   };
   editCD = e => {
-    console.log(" tutej,", e.currentTarget.name);
     const updatedCD = {
       ...this.props.cd,
       [e.currentTarget.name]: e.currentTarget.value

@@ -11,7 +11,6 @@ class AddCDForm extends Component {
 
   createCD = e => {
     e.preventDefault();
-    console.log(this.artistRef.current.value);
     const cd = {
       artist: this.artistRef.current.value,
       album: this.albumRef.current.value,
