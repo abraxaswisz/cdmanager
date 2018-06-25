@@ -11,8 +11,13 @@ class CD extends Component {
     });
   };
   editCD = e => {
-    e.preventDefault();
+    console.log(" tutej,", e.currentTarget.name);
     console.log(this.props.updateCD);
+    const updatedCD = {
+      ...this.props.cd,
+      [e.currentTarget.name]: e.currentTarget.value
+    };
+    this.props.updateCD(this.props.index, updatedCD);
   };
   render() {
     const { artist, album, year } = this.props.cd;
@@ -20,30 +25,36 @@ class CD extends Component {
     return (
       <Fragment>
         {this.state.editable ? (
-          <form onSubmit={this.editCD}>
+          <Fragment>
             <input
               ref={this.artistRef}
+              name="artist"
               id="artist"
               type="text"
               defaultValue={artist}
+              onChange={this.editCD}
             />
             <br />
             <input
               ref={this.albumRef}
+              name="album"
               id="album"
               type="text"
               defaultValue={album}
+              onChange={this.editCD}
             />
             <br />
             <input
               ref={this.yearRef}
+              name="year"
               id="year"
               type="text"
               defaultValue={year}
+              onChange={this.editCD}
             />
             <br />
-            <button type="submit">Save</button>
-          </form>
+            <button onClick={this.makeEditable}>Save</button>
+          </Fragment>
         ) : (
           <Fragment>
             <h3>{artist}</h3>
