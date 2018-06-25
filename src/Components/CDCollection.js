@@ -11,6 +11,7 @@ class CDCollection extends Component {
               <CD
                 cd={this.props.cds[key]}
                 removeCD={this.props.removeCD}
+                updateCD={this.props.updateCD}
                 index={key}
               />
             </li>

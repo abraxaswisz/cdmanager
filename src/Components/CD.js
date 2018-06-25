@@ -10,32 +10,36 @@ class CD extends Component {
       editable: !this.state.editable
     });
   };
+  editCD = e => {
+    e.preventDefault();
+    console.log(this.props.updateCD);
+  };
   render() {
     const { artist, album, year } = this.props.cd;
     if (!this.props.cd) return null;
     return (
       <Fragment>
         {this.state.editable ? (
-          <form>
+          <form onSubmit={this.editCD}>
             <input
               ref={this.artistRef}
               id="artist"
               type="text"
-              placeholder={artist}
+              defaultValue={artist}
             />
             <br />
             <input
               ref={this.albumRef}
               id="album"
               type="text"
-              placeholder={album}
+              defaultValue={album}
             />
             <br />
             <input
               ref={this.yearRef}
               id="year"
               type="text"
-              placeholder={year}
+              defaultValue={year}
             />
             <br />
             <button type="submit">Save</button>

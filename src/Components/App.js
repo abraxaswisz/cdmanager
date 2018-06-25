@@ -32,8 +32,12 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <AddCDForm addCD={this.addCD} updateCD={this.updateCD} />
-        <CDCollection cds={this.state.cds} removeCD={this.removeCD} />
+        <AddCDForm addCD={this.addCD} />
+        <CDCollection
+          cds={this.state.cds}
+          removeCD={this.removeCD}
+          updateCD={this.updateCD}
+        />
       </React.Fragment>
     );
   }
