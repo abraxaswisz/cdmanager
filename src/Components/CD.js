@@ -48,7 +48,8 @@ class CD extends Component {
               ref={this.yearRef}
               name="year"
               id="year"
-              type="text"
+              type="number"
+              step="1"
               defaultValue={year}
               onChange={this.editCD}
             />

@@ -10,7 +10,7 @@ class AddCDForm extends Component {
     console.log(this.artistRef.current.value);
     const cd = {
       artist: this.artistRef.current.value,
-      album: this.artistRef.current.value,
+      album: this.albumRef.current.value,
       year: this.yearRef.current.value
     };
     this.props.addCD(cd);
@@ -27,7 +27,7 @@ class AddCDForm extends Component {
           <input ref={this.albumRef} required id="album" type="text" />
           <br />
           <label htmlFor="year">Year</label>
-          <input ref={this.yearRef} id="year" type="text" />
+          <input ref={this.yearRef} id="year" type="number" step="1" />
           <br />
           <button type="submit">Submit</button>
         </form>
