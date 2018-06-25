@@ -1,8 +1,19 @@
 import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
 
 class CD extends Component {
   state = {
     editable: false
+  };
+  static propTypes = {
+    cd: PropTypes.shape({
+      artist: PropTypes.string.isRequired,
+      album: PropTypes.string.isRequired,
+      year: PropTypes.number
+    }),
+    updateCD: PropTypes.func,
+    index: PropTypes.string,
+    removeCD: PropTypes.func
   };
 
   makeEditable = () => {
@@ -12,7 +23,6 @@ class CD extends Component {
   };
   editCD = e => {
     console.log(" tutej,", e.currentTarget.name);
-    console.log(this.props.updateCD);
     const updatedCD = {
       ...this.props.cd,
       [e.currentTarget.name]: e.currentTarget.value

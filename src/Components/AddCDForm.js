@@ -1,9 +1,13 @@
 import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
 
 class AddCDForm extends Component {
   artistRef = React.createRef();
   albumRef = React.createRef();
   yearRef = React.createRef();
+  static propTypes = {
+    addCD: PropTypes.func
+  };
 
   createCD = e => {
     e.preventDefault();
@@ -11,7 +15,7 @@ class AddCDForm extends Component {
     const cd = {
       artist: this.artistRef.current.value,
       album: this.albumRef.current.value,
-      year: this.yearRef.current.value
+      year: Number(this.yearRef.current.value)
     };
     this.props.addCD(cd);
     e.currentTarget.reset();

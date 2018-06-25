@@ -1,7 +1,13 @@
 import React, { Component, Fragment } from "react";
 import CD from "./CD";
+import PropTypes from "prop-types";
 
 class CDCollection extends Component {
+  static propTypes = {
+    cds: PropTypes.object,
+    removeCD: PropTypes.func,
+    updateCD: PropTypes.func
+  };
   render() {
     return (
       <Fragment>
