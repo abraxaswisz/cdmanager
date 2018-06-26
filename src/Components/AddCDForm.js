@@ -65,7 +65,7 @@ class AddCDForm extends Component {
           <ul>
             {this.state.searchresults
               ? this.state.searchresults.map(result => {
-                  return <ArtistSearchResult key={result.id} result={result} />;
+                  return <li key={result.id}>{result.title}</li>;
                 })
               : null}
           </ul>
