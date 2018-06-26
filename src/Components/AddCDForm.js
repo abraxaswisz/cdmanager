@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
+import ArtistSearchResult from "./ArtistSearchResult";
 
 class AddCDForm extends Component {
   state = {
@@ -64,7 +65,7 @@ class AddCDForm extends Component {
           <ul>
             {this.state.searchresults
               ? this.state.searchresults.map(result => {
-                  return <li key={result.id}>{result.title}</li>;
+                  return <ArtistSearchResult key={result.id} result={result} />;
                 })
               : null}
           </ul>
