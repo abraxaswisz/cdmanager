@@ -35,10 +35,15 @@ class AddCDForm extends Component {
       .then(json => artistArray.push(...json.results))
       .then(() => artistArray)
       .then(data => {
-        console.log("tutej", data);
-        this.setState({
-          searchresults: [...data]
-        });
+        if (query) {
+          this.setState({
+            searchresults: [...data]
+          });
+        } else {
+          this.setState({
+            searchresults: []
+          });
+        }
       })
       .catch(error => console.log(error));
     return artistArray;
@@ -56,6 +61,13 @@ class AddCDForm extends Component {
             id="artist"
             type="text"
           />
+          <ul>
+            {this.state.searchresults
+              ? this.state.searchresults.map(result => {
+                  return <li key={result.id}>{result.title}</li>;
+                })
+              : null}
+          </ul>
           <br />
           <label htmlFor="album">Album</label>
           <input ref={this.albumRef} required id="album" type="text" />
