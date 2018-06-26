@@ -23,10 +23,10 @@ class AddCDForm extends Component {
     e.currentTarget.reset();
   };
 
-  getDiscogsAlbum = ask => {
+  getDiscogsArtist = query => {
     const key = "CkcQiUDczVzwnWytrlqy";
     const secret = "mtTuMzcQhlmSqLvTwSwXvjWoenTiRgiM";
-    const discogsSearch = `https://api.discogs.com/database/search?q=${ask}&type=artist&key=${key}&secret=${secret}&per_page=10`;
+    const discogsSearch = `https://api.discogs.com/database/search?q=${query}&type=artist&key=${key}&secret=${secret}&per_page=10`;
 
     const artistArray = [];
 
@@ -34,19 +34,16 @@ class AddCDForm extends Component {
       .then(response => response.json())
       .then(json => artistArray.push(...json.results))
       .then(() => artistArray)
+      .then(data => {
+        console.log("tutej", data);
+        this.setState({
+          searchresults: [...data]
+        });
+      })
       .catch(error => console.log(error));
     return artistArray;
   };
 
-  generateList = () => {
-    let getArtist = this.getDiscogsAlbum(this.artistRef.current.value);
-    console.log(getArtist);
-    if (getArtist) {
-      this.setState({
-        searchresults: [getArtist]
-      });
-    }
-  };
   render() {
     return (
       <Fragment>
@@ -54,7 +51,7 @@ class AddCDForm extends Component {
           <label htmlFor="artist">Artist</label>
           <input
             ref={this.artistRef}
-            onChange={this.generateList}
+            onChange={() => this.getDiscogsArtist(this.artistRef.current.value)}
             required
             id="artist"
             type="text"
