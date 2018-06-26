@@ -58,13 +58,17 @@ class AddCDForm extends Component {
     return artistArray;
   };
   pickArtist = e => {
+    const key = "CkcQiUDczVzwnWytrlqy";
+    const secret = "mtTuMzcQhlmSqLvTwSwXvjWoenTiRgiM";
     const getArtistId = e.currentTarget.attributes.index.value;
     const url = `https://api.discogs.com/artists/${getArtistId}`;
     if (getArtistId) {
       fetch(url)
         .then(data => data.json())
         .then(json => (this.artistRef.current.value = json.name))
-        .then(() => fetch(`${url}/releases?&per_page=100`))
+        .then(() =>
+          fetch(`${url}/releases?&key=${key}&secret=${secret}&per_page=100`)
+        )
         .then(res => res.json())
         .then(json => this.setState({ artistReleases: [...json.releases] }))
         .catch(err => console.log(err));
@@ -149,6 +153,7 @@ class AddCDForm extends Component {
                   key={album.id + 1}
                 >
                   {album.title}
+                  <img src={album.thumb} alt={album.title} />
                 </li>
               );
             })}
