@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import { getDiscogsAlbum } from "../discogs.js";
 
 class AddCDForm extends Component {
   state = {
@@ -23,14 +22,29 @@ class AddCDForm extends Component {
     this.props.addCD(cd);
     e.currentTarget.reset();
   };
+
+  getDiscogsAlbum = ask => {
+    const key = "CkcQiUDczVzwnWytrlqy";
+    const secret = "mtTuMzcQhlmSqLvTwSwXvjWoenTiRgiM";
+    const discogsSearch = `https://api.discogs.com/database/search?q=${ask}&type=artist&key=${key}&secret=${secret}&per_page=10`;
+
+    const artistArray = [];
+
+    fetch(discogsSearch)
+      .then(response => response.json())
+      .then(json => artistArray.push(...json.results))
+      .then(() => artistArray)
+      .catch(error => console.log(error));
+    return artistArray;
+  };
+
   generateList = () => {
-    let getAlbum = getDiscogsAlbum(this.artistRef.current.value);
-    const { searchresults } = this.state;
-    console.log(getAlbum);
-    if (getAlbum) {
-      this.setState(prevState => ({
-        searchresults: [...prevState.searchresults, ...getAlbum]
-      }));
+    let getArtist = this.getDiscogsAlbum(this.artistRef.current.value);
+    console.log(getArtist);
+    if (getArtist) {
+      this.setState({
+        searchresults: [getArtist]
+      });
     }
   };
   render() {
