@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import ArtistSearchResult from "./ArtistSearchResult";
 
 class AddCDForm extends Component {
   state = {
@@ -83,8 +82,9 @@ class AddCDForm extends Component {
       artistReleases.filter(album => {
         let albumToLower = album.title.toString().toLowerCase();
         if (albumToLower.includes(albumRef.toLowerCase())) {
-          filteredArray.push(album);
+          return filteredArray.push(album);
         }
+        return null;
       });
     }
     this.setState({
@@ -94,19 +94,17 @@ class AddCDForm extends Component {
   pickAlbum = e => {
     const { searchAlbumresult } = this.state;
     const getAlbumId = e.currentTarget.attributes.index.value;
-    const getYear = searchAlbumresult.find(album => album.id == getAlbumId)
-      .year;
-    const getName = searchAlbumresult.find(album => album.id == getAlbumId)
-      .title;
+    const getYear = searchAlbumresult.find(
+      album => Number(album.id) === Number(getAlbumId)
+    ).year;
+    const getName = searchAlbumresult.find(
+      album => Number(album.id) === Number(getAlbumId)
+    ).title;
     this.yearRef.current.value = getYear;
     this.albumRef.current.value = getName;
   };
   render() {
-    const {
-      searchArtistresult,
-      artistReleases,
-      searchAlbumresult
-    } = this.state;
+    const { searchArtistresult, searchAlbumresult } = this.state;
     return (
       <Fragment>
         <form onSubmit={this.createCD}>
