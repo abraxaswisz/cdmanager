@@ -60,16 +60,20 @@ class AddCDForm extends Component {
     const key = "CkcQiUDczVzwnWytrlqy";
     const secret = "mtTuMzcQhlmSqLvTwSwXvjWoenTiRgiM";
     const getArtistId = e.currentTarget.attributes.index.value;
-    const url = `https://api.discogs.com/artists/${getArtistId}`;
+    const url = `https://api.discogs.com/artists/${getArtistId}/releases?&key=${key}&secret=${secret}&per_page=100`;
     if (getArtistId) {
       fetch(url)
         .then(data => data.json())
-        .then(json => (this.artistRef.current.value = json.name))
-        .then(() =>
-          fetch(`${url}/releases?&key=${key}&secret=${secret}&per_page=100`)
+        .then(json =>
+          this.setState({
+            artistReleases: [...json.releases],
+            searchArtistresult: []
+          })
         )
-        .then(res => res.json())
-        .then(json => this.setState({ artistReleases: [...json.releases] }))
+        .then(
+          () =>
+            (this.artistRef.current.value = this.state.artistReleases[0].artist)
+        )
         .catch(err => console.log(err));
     }
   };
@@ -111,7 +115,11 @@ class AddCDForm extends Component {
           <label htmlFor="artist">Artist</label>
           <input
             ref={this.artistRef}
-            onChange={() => this.getDiscogsArtist(this.artistRef.current.value)}
+            onKeyUp={() => {
+              setTimeout(() => {
+                this.getDiscogsArtist(this.artistRef.current.value);
+              }, 1000);
+            }}
             required
             id="artist"
             type="text"
