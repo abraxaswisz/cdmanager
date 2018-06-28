@@ -14,7 +14,7 @@ class AddCDForm extends Component {
   static propTypes = {
     addCD: PropTypes.func
   };
-
+  // create Cd and to your collection
   createCD = e => {
     e.preventDefault();
     const cd = {
@@ -30,14 +30,12 @@ class AddCDForm extends Component {
       searchAlbumresult: []
     });
   };
-
-  getDiscogsArtist = query => {
+  // fetch Artist from discogs api and add to state
+  getArtist = query => {
     const key = "CkcQiUDczVzwnWytrlqy";
     const secret = "mtTuMzcQhlmSqLvTwSwXvjWoenTiRgiM";
     const discogsSearch = `https://api.discogs.com/database/search?q=${query}&type=artist&key=${key}&secret=${secret}&per_page=10`;
-
     const artistArray = [];
-
     fetch(discogsSearch)
       .then(response => response.json())
       .then(json => artistArray.push(...json.results))
@@ -56,27 +54,55 @@ class AddCDForm extends Component {
       .catch(error => console.log(error));
     return artistArray;
   };
+
   pickArtist = e => {
+    let artistName = e.currentTarget.innerText;
+    // trying with function which fetch full album list
+    const filterList = json => {
+      const filteredArray = [];
+      const { pages, urls } = json.pagination;
+      let changingUrls = urls.next.split("&page=2").join("");
+
+      for (let i = 0; i < pages; i++) {
+        fetch(`${changingUrls}&page=${i}`)
+          .then(res => res.json())
+          .then(json => {
+            let filteredList = json.releases.filter(
+              key => key.type === "master" && key.role === "Main"
+            );
+            filteredArray.push(...filteredList);
+            return filteredArray;
+          })
+          .then(array => {
+            this.setState({
+              artistReleases: [...array],
+              searchArtistresult: []
+            });
+          });
+      }
+      return filteredArray;
+    };
+
     const key = "CkcQiUDczVzwnWytrlqy";
     const secret = "mtTuMzcQhlmSqLvTwSwXvjWoenTiRgiM";
     const getArtistId = e.currentTarget.attributes.index.value;
-    const url = `https://api.discogs.com/artists/${getArtistId}/releases?&key=${key}&secret=${secret}&per_page=100`;
-    if (getArtistId) {
-      fetch(url)
-        .then(data => data.json())
-        .then(json =>
+    const url = `https://api.discogs.com/artists/${getArtistId}/releases?sort=format&?sort_order=desc&key=${key}&secret=${secret}&per_page=100`;
+    fetch(url)
+      .then(data => data.json())
+      .then(json => {
+        this.artistRef.current.value = artistName;
+        if (json.pagination.pages > 1) {
+          filterList(json);
+        } else {
           this.setState({
             artistReleases: [...json.releases],
             searchArtistresult: []
-          })
-        )
-        .then(
-          () =>
-            (this.artistRef.current.value = this.state.artistReleases[0].artist)
-        )
-        .catch(err => console.log(err));
-    }
+          });
+        }
+      })
+      .catch(err => console.log(err));
   };
+
   filterAlbum = () => {
     let albumRef = this.albumRef.current.value;
     const { artistReleases } = this.state;
@@ -117,8 +143,8 @@ class AddCDForm extends Component {
             ref={this.artistRef}
             onKeyUp={() => {
               setTimeout(() => {
-                this.getDiscogsArtist(this.artistRef.current.value);
-              }, 1000);
+                this.getArtist(this.artistRef.current.value);
+              }, 1500);
             }}
             required
             id="artist"
@@ -156,7 +182,7 @@ class AddCDForm extends Component {
                   onClick={this.pickAlbum}
                   ref={this.searchAlbumRef}
                   index={album.id}
-                  key={album.id + 1}
+                  key={album.id + Math.random()}
                 >
                   {album.title}
                   <img src={album.thumb} alt={album.title} />
