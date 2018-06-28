@@ -55,9 +55,16 @@ class AddCDForm extends Component {
     return artistArray;
   };
 
-  pickArtist = e => {
+  pickArtistAndGetReleases = e => {
+    // variables
     let artistName = e.currentTarget.innerText;
-    // trying with function which fetch full album list
+    const getArtistId = e.currentTarget.attributes.index.value;
+    // variables for fetch
+    const key = "CkcQiUDczVzwnWytrlqy";
+    const secret = "mtTuMzcQhlmSqLvTwSwXvjWoenTiRgiM";
+    const url = `https://api.discogs.com/artists/${getArtistId}/releases?sort=format&?sort_order=desc&key=${key}&secret=${secret}&per_page=100`;
+
+    // helper method
     const filterList = json => {
       const filteredArray = [];
       const { pages, urls } = json.pagination;
@@ -83,10 +90,6 @@ class AddCDForm extends Component {
       return filteredArray;
     };
 
-    const key = "CkcQiUDczVzwnWytrlqy";
-    const secret = "mtTuMzcQhlmSqLvTwSwXvjWoenTiRgiM";
-    const getArtistId = e.currentTarget.attributes.index.value;
-    const url = `https://api.discogs.com/artists/${getArtistId}/releases?sort=format&?sort_order=desc&key=${key}&secret=${secret}&per_page=100`;
     fetch(url)
       .then(data => data.json())
       .then(json => {
@@ -132,6 +135,10 @@ class AddCDForm extends Component {
     ).title;
     this.yearRef.current.value = getYear;
     this.albumRef.current.value = getName;
+    this.setState({
+      artistReleases: [],
+      searchAlbumresult: []
+    });
   };
   render() {
     const { searchArtistresult, searchAlbumresult } = this.state;
@@ -141,10 +148,8 @@ class AddCDForm extends Component {
           <label htmlFor="artist">Artist</label>
           <input
             ref={this.artistRef}
-            onKeyUp={() => {
-              setTimeout(() => {
-                this.getArtist(this.artistRef.current.value);
-              }, 1500);
+            onBlur={() => {
+              this.getArtist(this.artistRef.current.value);
             }}
             required
             id="artist"
@@ -155,7 +160,7 @@ class AddCDForm extends Component {
               ? searchArtistresult.map(result => {
                   return (
                     <li
-                      onClick={this.pickArtist}
+                      onClick={this.pickArtistAndGetReleases}
                       ref={this.searchArtistRef}
                       key={result.id}
                       index={result.id}
