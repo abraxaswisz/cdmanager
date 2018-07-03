@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
+import ArtistResult from "./ArtistResult";
+import AlbumResult from "./AlbumResult";
 
 class AddCDForm extends Component {
   state = {
@@ -10,7 +12,6 @@ class AddCDForm extends Component {
   artistRef = React.createRef();
   albumRef = React.createRef();
   yearRef = React.createRef();
-  searchArtistRef = React.createRef();
   static propTypes = {
     addCD: PropTypes.func
   };
@@ -58,6 +59,7 @@ class AddCDForm extends Component {
   pickArtistAndGetReleases = e => {
     // variables
     let artistName = e.currentTarget.innerText;
+    console.log(e.currentTarget);
     const getArtistId = e.currentTarget.attributes.index.value;
     // variables for fetch
     const key = "CkcQiUDczVzwnWytrlqy";
@@ -159,14 +161,12 @@ class AddCDForm extends Component {
             {searchArtistresult
               ? searchArtistresult.map(result => {
                   return (
-                    <li
-                      onClick={this.pickArtistAndGetReleases}
-                      ref={this.searchArtistRef}
+                    <ArtistResult
+                      pickArtist={this.pickArtistAndGetReleases}
+                      result={result}
                       key={result.id}
                       index={result.id}
-                    >
-                      {result.title}
-                    </li>
+                    />
                   );
                 })
               : null}
@@ -183,15 +183,12 @@ class AddCDForm extends Component {
           <ul>
             {searchAlbumresult.map(album => {
               return (
-                <li
-                  onClick={this.pickAlbum}
-                  ref={this.searchAlbumRef}
-                  index={album.id}
+                <AlbumResult
+                  pickAlbum={this.pickAlbum}
+                  album={album}
                   key={album.id + Math.random()}
-                >
-                  {album.title}
-                  <img src={album.thumb} alt={album.title} />
-                </li>
+                  index={album.id}
+                />
               );
             })}
           </ul>
